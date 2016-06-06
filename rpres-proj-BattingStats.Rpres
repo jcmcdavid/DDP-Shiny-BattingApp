@@ -1,0 +1,90 @@
+rpres-proj-BattingStats
+========================================================
+author: John C McDavid
+date: 6-5-2016
+Batting Stats Shiny App
+- An app that calculates some batting statistics and calculates the day of week from a date
+
+========================================================
+transition:  linear
+
+This is a Shiny App that Calculates Batting Stats and 
+Calculates Day of Week for a Given Date
+
+- Calculates Batting Stats for players on a particular team
+    - Number of Players With > 100 At Bats
+    - Batting Average (BA)
+    - Slugging Percentage (SP)
+    - On Base Average (OBA)
+- Calculates Day of Week given an inputted date
+- Demonstrates reactive code in a Shiny App
+- User enters info and presses Submit buttom
+
+Batting Stats
+========================================================
+transition: rotate
+
+This App uses the 'batting' dataset from 'Using R'.  The
+dataset contains raw batting numbers (hits, doubles, triples, walks, etc.)
+for players with > 100 at bats for the 2002 MLB
+season.  The App will calculate the aggregate 
+baseball stat (BA, SP, or OBA) for a given team using the 
+batting numbers for all the players with >100 ABs on that team.
+
+The user enters
+(1) Which stat(s) to calculate: can choose BA, SP, or OBA; 
+(2) Which baseball team the players' stats are calcuated for
+
+Outputs are...
+(1) Number of players on the team for which the stats are being calculated; and
+(2) the batting stat(s) of interest
+
+Batting Stats Sample Calculations
+========================================================
+transition:  linear
+
+4 players on a team have a total of 36 singles, 10 doubles,
+3 triples and 10 home runs, with 5 walks, 4 hit by pitch, and 4 sacrifice flies.
+Total hits are 59 and total at-bats are 180.
+
+$$
+  \begin{aligned}
+  {BA}=\frac{H}{AB} \\
+  {SP}=\frac{1 * singles + 2 * doubles + 3 * triples + 4 * HR}{AB} \\
+  {OBA}=\frac{H + BB + HBP}{AB + BB + HBP + SF} \\
+  \end{aligned}
+$$
+
+```{r, echo = FALSE}
+    H = 59; DOUBLE = 10; TRIPLE = 3; HR = 10; BB = 5; HBP = 4; SF = 4
+    tot_hit = H
+    tot_ab = 180
+    batavg <- tot_hit / tot_ab
+    SP <- ( 1 * (H - DOUBLE - TRIPLE - HR) 
+           + 2 * DOUBLE + 3 * TRIPLE + 4 * HR ) / tot_ab
+            OBA <- ( H + BB + HBP ) / ( tot_ab + BB + HBP + SF )
+       # round(batavg,3)
+        # round(OBA,3)
+```
+On Base Average (Example):
+```{r, echo = TRUE}
+OBA <- ( H + BB + HBP ) / ( tot_ab + BB + HBP + SF )
+round(SP,3)
+```    
+    
+
+Day of Week (DOW) Calculator
+========================================================
+transition:  linear
+
+To demonstrate reactive calculation in Shiny and just for fun,
+we ask the user to input a birthdate (or any date) and use
+reactive statements to calculate the DOW name taht the date fell on.
+
+Example: What Day of Week was July 1, 1970?
+```{r}
+    date1 <- as.POSIXct("1970-07-01")
+    dow <- weekdays(date1,abbreviate = FALSE)
+    dow
+```
+The date `r date1` fell on a `r dow`.
